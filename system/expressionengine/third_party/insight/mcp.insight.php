@@ -12,6 +12,17 @@
 // Include configuration
 include(PATH_THIRD . 'insight/addon.setup.php');
 
+use BuzzingPixel\Insight\Controller;
+
 class Insight_mcp
 {
+	/**
+	 * Control panel index
+	 *
+	 * @return string
+	 */
+	public function index()
+	{
+		return Controller\DisplayPage::display();
+	}
 }
