@@ -29,16 +29,20 @@ class DisplayPage
 		ee()->cp->load_package_css('insight.min');
 
 		$groupId = (int) ee()->session->userdata('group_id');
-		$page = ee()->input->get('insightPage') ?: 'index';
+		$page = ee()->input->get('insightPage') ?: 'readme';
 
 		// Get the path
-		$path = ee()->config->item("insight_doc_path_usergroup_{$groupId}");
+		$config = ee()->config->item('insight_doc_paths');
+		$path = null;
 
-		if (! $path) {
-			$path = ee()->config->item('insight_doc_path');
+		// Check if a specific path has been defined for this user group
+		if (isset($config[$groupId])) {
+			$path = $config[$groupId];
+		} elseif (isset($config['default'])) {
+			$path = $config['default'];
 		}
 
-		// If no path has been defined display notice
+		// If no path has been defined at all display notice
 		if (! $path) {
 			return ee()->load->view(
 				'Notice',
@@ -47,9 +51,12 @@ class DisplayPage
 			);
 		}
 
+		// Normalize path
+		$path = rtrim($path, '/') . '/';
+
 		// Get content
 		$content = new Service\Content();
-		$content = $content->get($path . '/' . $page);
+		$content = $content->get($path . $page);
 
 		// Check for content
 		if (! $content->getContent()) {
@@ -67,6 +74,19 @@ class DisplayPage
 			ee()->view->cp_page_title = $frontMatter['Title'];
 		}
 
-		return $content->getContent();
+		// Get page list
+		$pageList = new Service\PageList();
+		$list = $pageList->get($path);
+
+		return ee()->load->view(
+			'Page',
+			array(
+				'list' => $list,
+				'content' => $content->getContent(),
+				'baseUrl' => BASE . AMP . 'C=addons_modules' . AMP . 'M=show_module_cp' . AMP . 'module=insight',
+				'currentPage' => $page
+			),
+			true
+		);
 	}
 }

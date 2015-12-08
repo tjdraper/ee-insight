@@ -25,10 +25,11 @@ class Content
 	 */
 	public function get($path)
 	{
+		// Check paths for content files
 		$content = $this->checkContent($path);
 
+		// Parse the content into YAML and Markdown
 		$frontYamlParser = new FrontYAML\Parser();
-
 		$content = $frontYamlParser->parse($content);
 
 		return $content;
@@ -42,16 +43,27 @@ class Content
 	 */
 	private function checkContent($path)
 	{
+		// Get an initial path
 		$checkPath = $path;
 
 		if (is_file($checkPath)) {
 			return file_get_contents($checkPath);
 		}
 
+		// Check with .md extension
 		$checkPath = $path . '.md';
 
 		if (is_file($checkPath)) {
 			return file_get_contents($checkPath);
+		}
+
+		// Check for index file
+		$checkPath = explode('/', $path);
+		array_pop($checkPath);
+		$checkPath = implode('/', $checkPath);
+
+		if (is_file($checkPath . '/index.md')) {
+			return file_get_contents($checkPath . '/index.md');
 		}
 
 		return '';
