@@ -23,6 +23,7 @@ class Insight_mcp
 	 */
 	public function index()
 	{
-		return Controller\DisplayPage::display();
+		$displayPage = new Controller\DisplayPage();
+		return $displayPage->display();
 	}
 }
