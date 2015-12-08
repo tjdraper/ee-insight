@@ -1,0 +1,19 @@
+{
+	"addOnDir": "system/expressionengine/third_party/insight",
+	"cssDir": "css",
+	"jsDir": "javascript",
+	"cssFile": "insight.min.css",
+	"jsFile": "insight.min.js",
+	"proxy": false,
+	"lessCompress": true,
+	"lessBuild": [
+	],
+	"lessFiles": {
+	},
+	"jsBuildBefore": [
+	],
+	"jsBuild": [
+	],
+	"jsFiles": {
+	}
+}
