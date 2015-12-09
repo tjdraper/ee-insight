@@ -58,11 +58,7 @@ class Content
 		}
 
 		// Check for index file
-		$checkPath = explode('/', $path);
-		array_pop($checkPath);
-		$checkPath = implode('/', $checkPath);
-
-		if (is_file($checkPath . '/index.md')) {
+		if (is_file(dirname($path) . '/index.md')) {
 			return file_get_contents($checkPath . '/index.md');
 		}
 
